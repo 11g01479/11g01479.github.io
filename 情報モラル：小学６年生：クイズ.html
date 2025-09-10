@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>情報モラルクイズ（小学６年生）</title>
+  <style>
+    body { font-family: "Arial", sans-serif; padding: 20px; background-color: #f9f9ff; }
+    h1 { color: #2c3e50; }
+    .question { margin-bottom: 20px; }
+    .choices label { display: block; margin: 5px 0; }
+    .result { font-weight: bold; margin-top: 10px; }
+    #score { font-size: 1.2em; margin-top: 20px; }
+    button { padding: 10px 20px; font-size: 1em; }
+  </style>
+</head>
+<body>
+  <h1>情報モラルクイズ（小学６年生）</h1>
+  <form id="quizForm">
+    <div id="quizContainer"></div>
+    <button type="button" onclick="checkAnswers()">答え合わせ</button>
+  </form>
+  <div id="score"></div>
+
+  <script>
+    const quizData = [
+      {
+        question: "AI（人工知能）って何ができるの？",
+        choices: ["人の気持ちを理解する", "絵や音楽を作る", "宿題を全部やってくれる", "全部正しい"],
+        correct: 1
+      },
+      {
+        question: "生成AIを使うときに大切なことは？",
+        choices: ["間違っていても信じる", "確認せずに使う", "正しいかどうか確認する", "なんでも信じる"],
+        correct: 2
+      },
+      {
+        question: "情報モラルって何？",
+        choices: ["ネットで遊ぶルール", "インターネットを使うときの心づかい", "ゲームの攻略法", "スマホの使い方"],
+        correct: 1
+      },
+      {
+        question: "個人情報にあたるものはどれ？",
+        choices: ["好きな食べ物", "顔写真や住所", "好きなゲーム", "好きな色"],
+        correct: 1
+      },
+      {
+        question: "著作権があるものは？",
+        choices: ["誰かが作った絵や音楽", "自分の名前", "学校の時間割", "天気予報"],
+        correct: 0
+      },
+      {
+        question: "AIが作ったものは…？",
+        choices: ["必ず正しい", "間違うこともある", "全部すごい", "人間よりかしこい"],
+        correct: 1
+      },
+      {
+        question: "AIの苦手なことは？",
+        choices: ["計算すること", "気持ちを理解すること", "情報を集めること", "文章を書くこと"],
+        correct: 1
+      },
+      {
+        question: "AIを使ってはいけないことは？",
+        choices: ["友達を傷つける言葉を作る", "アイデアを考える", "調べものをする", "絵を描く"],
+        correct: 0
+      },
+      {
+        question: "AIに宿題を全部やらせるのは…？",
+        choices: ["かしこい使い方", "ちょっとズルい使い方", "正しい使い方", "先生にほめられる"],
+        correct: 1
+      },
+      {
+        question: "AIと未来を作るにはどうすればいい？",
+        choices: ["情報モラルを守る", "なんでもAIに任せる", "間違っていても使う", "ルールを無視する"],
+        correct: 0
+      }
+    ];
+
+    function createQuiz() {
+      const container = document.getElementById("quizContainer");
+      quizData.forEach((q, index) => {
+        const div = document.createElement("div");
+        div.className = "question";
+        div.innerHTML = `<p><strong>Q${index + 1}:</strong> ${q.question}</p>`;
+        const choicesDiv = document.createElement("div");
+        choicesDiv.className = "choices";
+        q.choices.forEach((choice, i) => {
+          choicesDiv.innerHTML += `
+            <label>
+              <input type="radio" name="q${index}" value="${i}"> ${choice}
+            </label>
+          `;
+        });
+        div.appendChild(choicesDiv);
+        container.appendChild(div);
+      });
+    }
+
+    function checkAnswers() {
+      let score = 0;
+      quizData.forEach((q, index) => {
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        const resultDiv = document.createElement("div");
+        resultDiv.className = "result";
+        if (selected) {
+          const answer = parseInt(selected.value);
+          if (answer === q.correct) {
+            score++;
+            resultDiv.textContent = "✅ 正解！";
+            resultDiv.style.color = "green";
+          } else {
+            resultDiv.textContent = "❌ 不正解";
+            resultDiv.style.color = "red";
+          }
+        } else {
+          resultDiv.textContent = "⚠️ 未回答";
+          resultDiv.style.color = "orange";
+        }
+        const questionDiv = document.querySelectorAll(".question")[index];
+        const oldResult = questionDiv.querySelector(".result");
+        if (oldResult) oldResult.remove();
+        questionDiv.appendChild(resultDiv);
+      });
+      const percentage = Math.round((score / quizData.length) * 100);
+      document.getElementById("score").textContent = `🎯 正解数：${score} / ${quizData.length}（正解率：${percentage}%）`;
+    }
+
+    createQuiz();
+  </script>
+</body>
+</html>

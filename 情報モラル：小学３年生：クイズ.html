@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>情報モラルクイズ（小学３年生）</title>
+  <style>
+    body { font-family: "Arial", sans-serif; background-color: #fff8dc; padding: 20px; }
+    h1 { color: #ff6347; }
+    .question { margin-bottom: 20px; }
+    .result { font-weight: bold; margin-top: 10px; }
+    .correct { color: green; }
+    .incorrect { color: red; }
+    #score { font-size: 1.2em; margin-top: 20px; }
+    button { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>🧠 情報モラルクイズ（小学３年生向け）</h1>
+  <form id="quizForm"></form>
+  <div id="score"></div>
+
+  <script>
+    const quizData = [
+      {
+        question: "AIってなに？",
+        choices: ["おばけ", "人間の友達", "考えたり話したりできるコンピューター技術", "ゲームの名前"],
+        answer: 2
+      },
+      {
+        question: "生成AIができることは？",
+        choices: ["絵を描いたりお話を作ったりできる", "走ることができる", "ジャンプする", "泳ぐ"],
+        answer: 0
+      },
+      {
+        question: "AIに教えちゃいけないことは？",
+        choices: ["好きな色", "自分の名前や住所", "好きな食べ物", "好きな動物"],
+        answer: 1
+      },
+      {
+        question: "AIが作ったものは？",
+        choices: ["ぜったいに正しい", "いつもウソ", "まちがってることもある", "こわいもの"],
+        answer: 2
+      },
+      {
+        question: "AIに話すときに大切なことは？",
+        choices: ["やさしい言葉を使う", "わるぐちを言う", "おこる", "さけぶ"],
+        answer: 0
+      },
+      {
+        question: "情報モラルってなに？",
+        choices: ["インターネットで遊ぶこと", "AIにお願いすること", "相手を思いやる気持ち", "ゲームのルール"],
+        answer: 2
+      },
+      {
+        question: "AIに質問するときは？",
+        choices: ["はっきり伝える", "だまってる", "なんとなく言う", "こっそり言う"],
+        answer: 0
+      },
+      {
+        question: "AIにお願いするときのコツは？",
+        choices: ["アイデアをたくさん教える", "ひみつを話す", "わるいことをお願いする", "なんでもまかせる"],
+        answer: 0
+      },
+      {
+        question: "困ったときはどうする？",
+        choices: ["先生やお家の人に相談する", "AIに全部話す", "ひとりでかくす", "インターネットに書く"],
+        answer: 0
+      },
+      {
+        question: "AIと仲良くするには？",
+        choices: ["やくそくを守って使う", "なんでも話す", "悪口を言う", "ひみつを教える"],
+        answer: 0
+      }
+    ];
+
+    const form = document.getElementById("quizForm");
+
+    quizData.forEach((q, i) => {
+      const div = document.createElement("div");
+      div.className = "question";
+      div.innerHTML = `<p><strong>Q${i + 1}. ${q.question}</strong></p>`;
+      q.choices.forEach((choice, j) => {
+        div.innerHTML += `
+          <label>
+            <input type="radio" name="q${i}" value="${j}"> ${choice}
+          </label><br>`;
+      });
+      form.appendChild(div);
+    });
+
+    const scoreDiv = document.getElementById("score");
+    const button = document.createElement("button");
+    button.textContent = "こたえあわせ";
+    button.type = "button";
+    button.onclick = () => {
+      let score = 0;
+      quizData.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const resultDiv = document.createElement("div");
+        resultDiv.className = "result";
+        if (selected) {
+          if (parseInt(selected.value) === q.answer) {
+            resultDiv.textContent = "⭕ 正解！";
+            resultDiv.classList.add("correct");
+            score++;
+          } else {
+            resultDiv.textContent = "❌ ちがうよ";
+            resultDiv.classList.add("incorrect");
+          }
+        } else {
+          resultDiv.textContent = "⚠️ こたえがえらばれていません";
+          resultDiv.classList.add("incorrect");
+        }
+        form.children[i].appendChild(resultDiv);
+      });
+      scoreDiv.textContent = `🎉 正解数：${score} / ${quizData.length}（正解率：${Math.round((score / quizData.length) * 100)}%）`;
+    };
+    form.appendChild(button);
+  </script>
+</body>
+</html>
